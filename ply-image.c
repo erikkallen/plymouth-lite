@@ -397,8 +397,8 @@ static bool
 hide_cursor (void)
 {
   static const char invisible_cursor[] = "\033[?25l\033[?1c";
-
-  if (write (STDOUT_FILENO, invisible_cursor, 
+  console_fd = open ("/dev/tty1", O_RDWR);
+  if (write (console_fd, invisible_cursor, 
              sizeof (invisible_cursor) - 1) != sizeof (invisible_cursor) - 1)
     return false;
 
@@ -453,8 +453,6 @@ main (int    argc,
       perror ("could not load image");
       return exit_code;
     }
-
-  console_fd = open ("/dev/tty1", O_RDWR);
 
   buffer = ply_frame_buffer_new (NULL);
 
